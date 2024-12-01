@@ -1,0 +1,133 @@
+/* Global Styles */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #f0f0f0;
+    display: flex;
+    min-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background-image: url('zetech.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  /* Container Styles */
+  
+  .container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    text-align: center;
+    max-width: 90vw; /* Added to ensure container doesn't exceed 90% of viewport width */
+  }
+  
+  /* Header Styles */
+  
+  h1 {
+    color: #2620c6;
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 2em; /* Increased font size for better readability */
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    font-size: 1.5em; /* Increased font size for better readability */
+  }
+  
+  /* Form Styles */
+  
+  label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  input[type="text"], input[type="password"], select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+    transition: border-color 0.2s ease-in-out; /* Added transition effect for better user experience */
+  }
+  
+  input[type="text"]:focus, input[type="password"]:focus, select:focus {
+    border-color: #2620c6; /* Changed border color on focus for better visibility */
+  }
+  
+  /* Button Styles */
+  
+  button {
+    width: 100%;
+    padding: 12px;
+    background-color: #2620c6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    transition: background-color 0.2s ease-in-out; /* Added transition effect for better user experience */
+  }
+  
+  button:hover {
+    background-color: #1a148f; /* Changed hover color for better contrast */
+  }
+  
+  /* Dashboard Styles */
+  
+  .manager-dashboard, .janitor-dashboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh;
+    background-color: #ffffff; /* Ensure background is white */
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background-image: none; /* Explicitly set to none */
+  }
+  
+  /* Footer Styles */
+  
+  .login-footer {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .login-footer a {
+    color: #2620c6;
+    text-decoration: none;
+  }
+  
+  .login-footer a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Mobile Styles */
+  
+  @media (max-width: 768px) {
+    .container {
+      width: 100%;
+      padding: 20px;
+    }
+    button {
+      font-size: 1em;
+    }
+  }

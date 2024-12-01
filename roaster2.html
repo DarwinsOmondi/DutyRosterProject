@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zetech University Duty Roster</title>
+    <link rel="stylesheet" href="rosterStyle.css"> <!-- Link to the external CSS file -->
+</head>
+<body>
+    <div class="container">
+        
+        <div id="login-section">
+            <h1>Zetech University Duty Roster</h1>
+            <h2>Login</h2>
+            <label for="username">Username:</label>
+            <input type="text" id="username">
+            <label for="password">Password:</label>
+            <input type="password" id="password">
+            <label for="role">Login as:</label>
+            <select id="role">
+                <option value="manager">Manager</option>
+                <option value="janitor">Janitor</option>
+            </select>
+            <button onclick="login()">Login</button>
+            <button onclick="showSignup()">Sign up</button>
+            <button onclick="showForgotPassword()">Forgot Password?</button>
+        </div>
+
+        <div id="forgot-password-section" style="display:none;">
+            <h2>Forgot Password</h2>
+            <label for="forgot-username">Username:</label>
+            <input type="text" id="forgot-username" placeholder="Enter your username">
+            <label for="forgot-new-password">New Password:</label>
+            <input type="password" id="forgot-new-password" placeholder="Enter new password">
+            <button onclick="resetPassword()">Reset Password</button>
+            <button onclick="showLogin()">Back to Login</button>
+        </div>
+
+        <!-- Signup Section -->
+        <div id="signup-section" class="signup" style="display:none;">
+            <h2>Sign Up</h2>
+            <label for="new-username">Username:</label>
+            <input type="text" id="new-username">
+            <label for="new-password">Password:</label>
+            <input type="password" id="new-password">
+            <label for="new-role">Role:</label>
+            <select id="new-role">
+                <option value="manager">Manager</option>
+                <option value="janitor">Janitor</option>
+            </select>
+            <button onclick="signup()">Sign Up</button>
+            <button onclick="showLogin()">Back to Login</button>
+        </div>
+
+        <!-- Manager Dashboard -->
+        <div id="manager-dashboard" style="display:none;">
+            <h2>Manager Dashboard</h2>
+            <div id="assigned-duties"></div>
+            <h3>Assign Duty</h3>
+            <label for="janitor-name">Janitor Name:</label>
+            <input type="text" id="janitor-name">
+            
+            <label for="duty-day">Day:</label>
+            <input type="date" id="duty-day">
+            
+            <label for="shift-time">Select Shift Time:</label>
+            <select id="shift-time">
+                <option value="08:00">8:00 AM - 10:00 AM</option>
+                <option value="10:00">10:00 AM - 12:00 PM</option>
+                <option value="12:00">12:00 PM - 2:00 PM</option>
+                <option value="14:00">2:00 PM - 4:00 PM</option>
+            </select>
+
+            <label for="duty-details">Duty Details:</label>
+            <select id="duty-details">
+                <option value="Cleaning Classrooms">Cleaning Classrooms</option>
+                <option value="Cleaning Lecture Halls">Cleaning Lecture Halls</option>
+                <option value="Cleaning Restrooms">Cleaning Restrooms</option>
+                <option value="Cleaning Common Areas">Cleaning Common Areas</option>
+                <option value="Office Cleaning">Office Cleaning</option>
+                <option value="Outdoor Cleaning">Outdoor Cleaning</option>
+            </select>
+            
+            <button onclick="assignDuty()">Assign Duty</button>
+            <button onclick="logout()">Logout</button>
+        </div>
+
+        <!-- Janitor Dashboard -->
+        <div id="janitor-dashboard" style="display:none;">
+            <h2>Janitor Dashboard</h2>
+            <div id="janitor-duties"></div>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+    <script>
+
+const express = require('express');
+const mysql = require('mysql');
+const bodyParser = require('body-parser');
+const app = express();
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
+const db = mysql.createConnection({
+    host: 'localhost',     
+    user: 'root',          
+    password: '',          
+    database: 'dutyroster' 
+});
+
+// Connect to the database
+db.connect(err => {
+    if (err) throw err;
+    console.log('MySQL connected...');
+});
+
+// POST request to handle login
+app.post('/login', (req, res) => {
+    const { username, password, role } = req.body;
+
+    const query = 'SELECT * FROM users WHERE username = ? AND password = ? AND role = ?';
+    db.query(query, [username, password, role], (err, result) => {
+        if (err) throw err;
+
+        if (result.length > 0) {
+            res.send({ success: true, message: `Logged in as ${role}` });
+        } else {
+            res.send({ success: false, message: 'Invalid credentials' });
+        }
+    });
+});
+
+// POST request to handle signup
+app.post('/signup', (req, res) => {
+    const { username, password, role } = req.body;
+
+    const query = 'INSERT INTO users (username, password, role) VALUES (?, ?, ?)';
+    db.query(query, [username, password, role], (err, result) => {
+        if (err) throw err;
+
+        res.send({ success: true, message: 'User registered successfully' });
+    });
+});
+
+// POST request to handle duty assignment
+app.post('/assignDuty', (req, res) => {
+    const { janitor_name, duty_day, shift_time, duty_details } = req.body;
+
+    const query = 'INSERT INTO duties (janitor_id, duty_day, shift_time, duty_details) VALUES ((SELECT id FROM users WHERE username = ?), ?, ?, ?)';
+    db.query(query, [janitor_name, duty_day, shift_time, duty_details], (err, result) => {
+        if (err) throw err;
+
+        res.send({ success: true, message: 'Duty assigned successfully' });
+    });
+});
+
+// Start server
+app.listen(3000, () => {
+    console.log('Server started on http://localhost:3000');
+});
+
+    </script>
+</body>
+</html>
